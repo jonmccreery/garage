@@ -3,21 +3,21 @@ export dev_session_name='crusoe_local'
 export devdir='/Users/jonathanmccreery/taxi/localdev'
 
 declare -a services
-services+=( 'agent')
-services+=( 'mdu')
-services+=( 'region')
-services+=( 'synchronizer')
-services+=( 'entity')
-services+=( 'billing')
-services+=( 'rest-gateway')
-services+=( 'portal-backend')
-services+=( 'portal')
-services+=( 'admin-gateway')
-services+=( 'portal-admin')
+services+=('agent')
+services+=('mdu')
+services+=('region')
+services+=('synchronizer')
+services+=('entity')
+services+=('billing')
+services+=('rest-gateway')
+services+=('portal-backend')
+services+=('portal')
+services+=('admin-gateway')
+services+=('portal-admin')
 
 declare -A service_cmds
 service_cmds=( 
-  ['agent']='sudo rm -rf /var/crusoe; cd agent; make setup; make dev; make run' 
+  ['agent']='cd agent; sudo make setup; make dev; make run' 
   ['mdu']='cd mdu-coordinator; make dev; make run' 
   ['region']='cd region-coordinator; cd dev; docker-compose up; docker-compose down; cd db; ./migrations.sh; cd ..; docker-compose up -d; cd ..;  make run'
   ['synchronizer']='cd region-coordinator; make run-synchronizer'
@@ -41,7 +41,8 @@ colima start
 cd "${devdir}"
 
 tmux new-session -s ${dev_session_name} -d
-tmux set -wg remain-on-exit on
+#tmux set-environment -t ${dev_session_name} CGO_LDFLAGS '-L/opt/homebrew/Cellar/libvirt/8.8.0/lib'
+#tmux set -wg remain-on-exit on
 for service in "${services[@]}"; do
   cmd="${service_cmds[${service}]}"
   echo "cmd: ${service}, value: ${cmd}"
