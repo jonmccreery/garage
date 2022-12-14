@@ -2,6 +2,10 @@
 export dev_session_name='crusoe_local'
 export devdir='/Users/jonathanmccreery/taxi/localdev'
 
+# this two part data structure hack exists because in shell,
+# regular arrays remain ordered, but associative arrays are not.
+# here, we use the ordering of one to sequence commands defined
+# in the other
 declare -a services
 services+=('agent')
 services+=('mdu')
